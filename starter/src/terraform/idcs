@@ -1,0 +1,13 @@
+# IDCS Token
+curl \
+-X POST \
+-u "$CLIENT_ID:$CLIENT_SECRET" \
+-H 'content-type: application/x-www-form-urlencoded;charset=UTF-8' \
+-d "grant_type=password" \
+-d "username=$OCI_USER" \
+-d "password=$OCI_PASSWORD" \
+-d 'scope=urn:opc:idm:t.user.me' \
+-o /tmp/token.json \
+"https://$IDCS_HOST:443/oauth2/v1/token" 
+export TF_VAR_idcs_at=`cat /tmp/token.json | jq -r ".access_token"`
+echo TF_VAR_idcs_at=$TF_VAR_idcs_at
