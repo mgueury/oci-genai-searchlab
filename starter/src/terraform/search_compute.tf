@@ -1,6 +1,6 @@
 # variable oic_client_id {}
 # variable oic_client_secret {}
-# variable idcs_domain_name { default = "Default" }
+variable idcs_domain_name { default = "Default" }
 
 data "oci_identity_domains" "starter_domains" {
     #Required
@@ -10,7 +10,7 @@ data "oci_identity_domains" "starter_domains" {
 
 # Defines the number of instances to deploy
 data "template_file" "user_data" {
-  template = file("./oic_agent_userdata.sh")
+  template = file("./search_compute_userdata.sh")
   vars = {
     OIC_OCID = var.oic_ocid
     # Needed for destroy
@@ -77,6 +77,18 @@ resource "oci_core_instance" "starter_instance" {
     ]
   }
 
+  provisioner "remote-exec" {
+    on_failure = continue
+    inline = [
+      "date"
+    ]
+  }
+
+  # Associating OIC with the private subnet"
+  provisioner "local-exec" {
+    command = "oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $var.oic_ocid --private-endpoint-outbound-connection-subnet-id $data.oci_core_subnet.starter_private_subnet.id"
+  }
+
   provisioner "file" {
     connection {
       agent       = false
@@ -85,11 +97,9 @@ resource "oci_core_instance" "starter_instance" {
       private_key = var.ssh_private_key
       host        = oci_core_instance.starter_instance.*.public_ip[0]
     }
-
     source      = "search_compute_install.sh"
     destination = "search_compute_install.sh"
   }
-
   freeform_tags = local.freeform_tags
 }
 
@@ -100,10 +110,6 @@ output "instance_private_ips" {
 
 output "instance_public_ips" {
   value = [oci_core_instance.starter_instance.public_ip]
-}
-
-output "idcs_url" {
-  value = local.idcs_url
 }
 
 output "ui_url" {
