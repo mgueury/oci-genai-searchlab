@@ -85,9 +85,9 @@ resource "oci_core_instance" "starter_instance" {
   }
 
   # Associating OIC with the private subnet"
-  provisioner "local-exec" {
-    command = "oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $var.oic_ocid --private-endpoint-outbound-connection-subnet-id $data.oci_core_subnet.starter_private_subnet.id"
-  }
+  # provisioner "local-exec" {
+  #   command = "oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $var.oic_ocid --private-endpoint-outbound-connection-subnet-id $data.oci_core_subnet.starter_private_subnet.id"
+  # }
 
   provisioner "file" {
     connection {
