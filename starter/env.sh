@@ -21,10 +21,6 @@ elif [ -f $HOME/.oci_starter_profile ]; then
   . $HOME/.oci_starter_profile  
 else
   export TF_VAR_oic_ocid="__TO_FILL__"
-  export TF_VAR_oic_appid="__TO_FILL__"
-  export TF_VAR_oic_client_id="__TO_FILL__"
-  export TF_VAR_oic_client_secret="__TO_FILL__"
-  export TF_VAR_oic_scope="__TO_FILL__"
   # export TF_VAR_compartment_ocid=ocid1.compartment.xxxxx
   # TF_VAR_license_model : BRING_YOUR_OWN_LICENSE or LICENSE_INCLUDED
   # export TF_VAR_license_model="LICENSE_INCLUDED"
