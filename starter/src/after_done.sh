@@ -13,6 +13,8 @@ get_attribute_from_tfstate "OPENSEARCH_HOST" "opensearch_cluster" "opensearch_fq
 get_attribute_from_tfstate "FN_OCID" "starter_fn_function" "id"
 get_attribute_from_tfstate "FN_INVOKE_ENDPOINT" "starter_fn_function" "invoke_endpoint"
 
+get_id_from_tfstate "PRIVATE_SUBNET_OCID" "starter_private_subnet" 
+
 echo
 echo "-- Not used in the lab --" 
 echo "OPENSEARCH_HOST=$OPENSEARCH_HOST"
@@ -25,6 +27,9 @@ echo "-- Creating oss_store.jks"
 echo -n | openssl s_client -connect $STREAM_BOOSTRAPSERVER | sed -ne  '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ociStreaming.cert
 keytool -keystore oss_store.jks -alias OSSStream -import -file ociStreaming.cert -storepass changeit -noprompt
 echo "File oss_store.jks created"
+
+echo "-- Associating OIC with the private subnet"
+oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $TF_VAR_oic_ocid --private-endpoint-outbound-connection-subnet-id $PRIVATE_SUBNET_OCID --wait-for-state SUCCEEDED --wait-for-state FAILED
 
 echo 
 echo "--------------------------"
