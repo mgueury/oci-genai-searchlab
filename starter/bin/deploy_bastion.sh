@@ -3,6 +3,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR/..
 . env.sh -silent
 
+# Create the DB table from the BASTION
 # Using RSYNC allow to reapply the same command several times easily. 
 if command -v rsync &> /dev/null
 then

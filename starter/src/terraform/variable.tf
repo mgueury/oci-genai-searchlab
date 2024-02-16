@@ -10,14 +10,13 @@ variable prefix { default = "starter" }
 
 # Java
 variable language { default = "java" }
-variable java_version { default = "17" }
+variable java_version { default = "21" }
 
 variable db_user { default="" }
 variable db_password{ default="" }
 
 # Compute Instance size
-variable instance_shape { default = "VM.Standard.E3.Flex" }
-// "VM.Standard.E4.Flex" 
+variable instance_shape { default = "VM.Standard.AMD.Generic" }
 variable instance_ocpus { default = 1 }
 variable instance_shape_config_memory_in_gbs { default = 8 }
 
@@ -40,6 +39,12 @@ variable license_model {
 
 # Group
 variable group_name { default="" }
+
+# Log Group
+variable log_group_ocid  { default="" }
+
+# Certificate
+variable "certificate_ocid" { default = "" }
 
 locals {
   group_name = var.group_name == "" ? "none" : var.group_name

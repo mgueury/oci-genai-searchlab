@@ -1,4 +1,4 @@
-# --- Network ---
+# --- Network ---  
 resource "oci_core_vcn" "starter_vcn" {
   cidr_block     = "10.0.0.0/16"
   compartment_id = local.lz_network_cmp_ocid
@@ -128,6 +128,41 @@ resource "oci_core_security_list" "starter_security_list" {
     }
   }  
 
+  // PostgreSQL
+  ingress_security_rules {
+    protocol  = "6" // tcp
+    source    = "10.0.0.0/8"
+    stateless = false
+
+    tcp_options {
+      min = 5432
+      max = 5433
+    }
+  }  
+
+  // Opensearch
+  ingress_security_rules {
+    protocol  = "6" // tcp
+    source    = "10.0.0.0/8"
+    stateless = false
+
+    tcp_options {
+      min = 9200
+      max = 9200
+    }
+  }  
+
+  ingress_security_rules {
+    protocol  = "6" // tcp
+    source    = "10.0.0.0/8"
+    stateless = false
+
+    tcp_options {
+      min = 5601
+      max = 5601
+    }
+  }
+  
   // External access to Kubernetes API endpoint
   ingress_security_rules {
     protocol  = "6" // tcp
@@ -164,28 +199,6 @@ resource "oci_core_security_list" "starter_security_list" {
     }
   }  
 
-  ingress_security_rules {
-    protocol  = "6" // tcp
-    source    = "0.0.0.0/0"
-    stateless = false
-
-    tcp_options {
-      min = 5601
-      max = 5601
-    }
-  }
-  
-  ingress_security_rules {
-    protocol  = "6" // tcp
-    source    = "0.0.0.0/0"
-    stateless = false
-
-    tcp_options {
-      min = 9200
-      max = 9200
-    }
-  }
-
   freeform_tags = local.freeform_tags
 }
 
@@ -200,9 +213,7 @@ data "oci_core_subnet" "starter_public_subnet" {
 
 data "oci_core_subnet" "starter_private_subnet" {
   subnet_id = oci_core_subnet.starter_private_subnet.id
-}
-
-
+} 
 resource "oci_core_nat_gateway" "starter_nat_gateway" {
   compartment_id = local.lz_network_cmp_ocid
   vcn_id         = oci_core_vcn.starter_vcn.id
@@ -220,5 +231,4 @@ resource "oci_core_route_table" "starter_route_private" {
     destination_type  = "CIDR_BLOCK"
     network_entity_id = oci_core_nat_gateway.starter_nat_gateway.id
   }
-}
-
+} 

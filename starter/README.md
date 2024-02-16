@@ -13,7 +13,7 @@
     - db        : SQL files of the database
     - terraform : Terraform scripts (Command: plan.sh / apply.sh)
 
-Help (Tutorial + How to customize): https://starter.oracloud.be/help
+Help (Tutorial + How to customize): https://www.ocistarter.com/help
 
 ### Next Steps:
 - Edit the file env.sh. Some variables need to be filled:

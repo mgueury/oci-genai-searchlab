@@ -1,3 +1,4 @@
+   
 resource "oci_functions_application" "starter_fn_application" {
   #Required
   compartment_id = local.lz_appdev_cmp_ocid
@@ -34,9 +35,8 @@ resource oci_logging_log export_starter_fn_application_invoke {
 locals {
   fnapp_ocid = oci_functions_application.starter_fn_application.id
 }
-
 variable "fn_image" { default = "" }
-variable "fn_db_url" { default = "" }
+variable "fn_db_url" { default = "" } 
 
 resource "oci_functions_function" "starter_fn_function" {
   #Required
@@ -45,10 +45,10 @@ resource "oci_functions_function" "starter_fn_function" {
   display_name   = "${var.prefix}-fn-function"
   image          = var.fn_image
   memory_in_mbs  = "2048"
-  config = {
-    DB_URL      = var.fn_db_url,
+  config = { 
+    JDBC_URL      = var.fn_db_url,     
     DB_USER     = var.db_user,
-    DB_PASSWORD = var.db_password,
+    DB_PASSWORD = var.db_password,     
   }
   #Optional
   timeout_in_seconds = "300"
@@ -67,7 +67,7 @@ resource "oci_functions_function" "starter_fn_function" {
 }
 
 output "fn_url" {
-  value = join("", oci_apigateway_deployment.opensearch_deployment.*.endpoint)
+  value = join("", oci_apigateway_deployment.starter_apigw_deployment.*.endpoint)
 }
 
 resource "oci_identity_policy" "starter_fn_policy" {
@@ -98,5 +98,4 @@ resource "oci_objectstorage_bucket" "starter_bucket" {
 
 locals {
   bucket_url = "https://objectstorage.${var.region}.oraclecloud.com/n/${var.namespace}/b/${var.prefix}-public-bucket/o"
-}
-
+}  

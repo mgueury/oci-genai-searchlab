@@ -1,5 +1,6 @@
-resource "oci_opensearch_opensearch_cluster" "opensearch_cluster" {
-  depends_on = [oci_identity_policy.search-policy]
+   
+resource "oci_opensearch_opensearch_cluster" "starter_opensearch" {
+  depends_on = [oci_identity_policy.starter_opensearch_policy]
 
   #Required
   compartment_id                     = local.lz_appdev_cmp_ocid
@@ -8,7 +9,7 @@ resource "oci_opensearch_opensearch_cluster" "opensearch_cluster" {
   data_node_host_ocpu_count          = 1
   data_node_host_type                = "FLEX"
   data_node_storage_gb               = 50
-  display_name                       = "opensearch-cluster"
+  display_name                       = "${var.prefix}-opensearch"
   master_node_count                  = 1
   master_node_host_memory_gb         = 24
   master_node_host_ocpu_count        = 1
@@ -16,9 +17,9 @@ resource "oci_opensearch_opensearch_cluster" "opensearch_cluster" {
   opendashboard_node_count           = 1
   opendashboard_node_host_memory_gb  = 16
   opendashboard_node_host_ocpu_count = 1
-  software_version                   = "2.8.0"
+  software_version                   = "2.11.0"
   subnet_compartment_id              = local.lz_network_cmp_ocid
-  subnet_id                          = data.oci_core_subnet.starter_public_subnet.id
+  subnet_id                          = data.oci_core_subnet.starter_private_subnet.id
   vcn_compartment_id                 = local.lz_network_cmp_ocid
   vcn_id                             = oci_core_vcn.starter_vcn.id
 
@@ -27,7 +28,15 @@ resource "oci_opensearch_opensearch_cluster" "opensearch_cluster" {
   // security_master_user_password_hash = var.security_master_user_password_hash  
 }
 
-data "oci_opensearch_opensearch_clusters" "opensearch_clusters" {
-  #Required
-  compartment_id = local.lz_appdev_cmp_ocid
+data "oci_opensearch_opensearch_cluster" "starter_opensearch" {
+    #Required
+    opensearch_cluster_id = oci_opensearch_opensearch_cluster.starter_opensearch.id
 }
+locals {
+  # TNS Connect String (Description....)
+  db_url = data.oci_opensearch_opensearch_cluster.starter_opensearch.opensearch_fqdn
+  db_port = "9200"
+  db_host = local.db_url
+  # jdbc_url = format("jdbc:opensearch://https://%s:9200/?hostnameVerification=false&trustSelfSigned=true", local.db_url)
+  jdbc_url = format("jdbc:opensearch://https://%s:9200/?hostnameVerification=false", local.db_url)
+}  

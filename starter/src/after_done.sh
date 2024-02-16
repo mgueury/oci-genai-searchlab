@@ -8,7 +8,7 @@ cd $ROOT_DIR
 get_attribute_from_tfstate "STREAM_BOOSTRAPSERVER" "opensearch_stream_pool" "kafka_settings[0].bootstrap_servers"
 get_attribute_from_tfstate "STREAM_OCID" "opensearch_stream_pool" "id"
 get_attribute_from_tfstate "TENANCY_NAME" "tenant_details" "name"
-get_attribute_from_tfstate "OPENSEARCH_HOST" "opensearch_cluster" "opensearch_fqdn"
+get_attribute_from_tfstate "OPENSEARCH_HOST" "starter_opensearch" "opensearch_fqdn"
 
 get_attribute_from_tfstate "FN_OCID" "starter_fn_function" "id"
 get_attribute_from_tfstate "FN_INVOKE_ENDPOINT" "starter_fn_function" "invoke_endpoint"
@@ -24,11 +24,12 @@ echo "COMPUTE_PUBLIC-IP=$COMPUTE_IP"
 # echo "# OPENSEARCH_PWD=LiveLab--123"
 
 echo "-- Creating oss_store.jks" 
-echo -n | openssl s_client -connect $STREAM_BOOSTRAPSERVER | sed -ne  '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ociStreaming.cert
-keytool -keystore oss_store.jks -alias OSSStream -import -file ociStreaming.cert -storepass changeit -noprompt
-echo "File oss_store.jks created"
+echo -n | openssl s_client -connect $STREAM_BOOSTRAPSERVER | sed -ne  '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > target/ociStreaming.cert
+# keytool -keystore oss_store.jks -alias OSSStream -import -file ociStreaming.cert -storepass changeit -noprompt
+echo "File target/oss_store.jks created"
 
 echo "-- Associating OIC with the private subnet"
+echo oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $TF_VAR_oic_ocid --private-endpoint-outbound-connection-subnet-id $PRIVATE_SUBNET_OCID --wait-for-state SUCCEEDED --wait-for-state FAILED
 oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $TF_VAR_oic_ocid --private-endpoint-outbound-connection-subnet-id $PRIVATE_SUBNET_OCID --wait-for-state SUCCEEDED --wait-for-state FAILED
 
 echo 

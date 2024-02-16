@@ -1,5 +1,5 @@
 locals {
-  APIGW_API_URL = format("https://%s:9200/oic/_search",oci_opensearch_opensearch_cluster.opensearch_cluster.opensearch_fqdn) 
+  APIGW_API_URL = format("https://%s:9200/oic/_search",oci_opensearch_opensearch_cluster.starter_opensearch.opensearch_fqdn) 
 }
 
 output api {

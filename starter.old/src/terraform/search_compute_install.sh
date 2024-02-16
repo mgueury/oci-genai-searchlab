@@ -84,6 +84,10 @@ curl -0 -v -X PUT https://${OPENSEARCH_HOST}:9200/oic \
       },
       "region": {
         "type": "keyword"
+      },
+      "context": {
+        "type": "text",
+        "enabled": false
       }
     }
   }
