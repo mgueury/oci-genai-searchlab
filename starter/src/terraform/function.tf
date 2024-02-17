@@ -66,10 +66,6 @@ resource "oci_functions_function" "starter_fn_function" {
 */    
 }
 
-output "fn_url" {
-  value = join("", oci_apigateway_deployment.starter_apigw_deployment.*.endpoint)
-}
-
 resource "oci_identity_policy" "starter_fn_policy" {
   name           = "${var.prefix}-fn-policy"
   description    = "APIGW access Function"
