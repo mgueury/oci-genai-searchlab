@@ -3,7 +3,7 @@ PROJECT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 export BIN_DIR=$PROJECT_DIR/bin
 
 # Env Variables
-export TF_VAR_prefix="starter"
+export TF_VAR_prefix="search"
 
 export TF_VAR_java_framework="springboot"
 export TF_VAR_java_vm="graalvm"

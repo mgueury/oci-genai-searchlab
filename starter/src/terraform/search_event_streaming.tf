@@ -1,11 +1,3 @@
-resource "oci_objectstorage_bucket" "opensearch_bucket" {
-  compartment_id = var.compartment_ocid
-  namespace      = local.ocir_namespace
-  name           = "opensearch-bucket"
-  access_type    = "ObjectReadWithoutList"
-  object_events_enabled = true
-}
-
 resource oci_events_rule opensearch_rule {
   actions {
     actions {
@@ -15,7 +7,7 @@ resource oci_events_rule opensearch_rule {
     }
   }
   compartment_id = var.compartment_ocid
-  condition      = "{\"eventType\":[\"com.oraclecloud.objectstorage.createobject\",\"com.oraclecloud.objectstorage.deleteobject\",\"com.oraclecloud.objectstorage.updateobject\"],\"data\":{\"additionalDetails\":{\"bucketName\":[\"opensearch-bucket\"]}}}"
+  condition      = "{\"eventType\":[\"com.oraclecloud.objectstorage.createobject\",\"com.oraclecloud.objectstorage.deleteobject\",\"com.oraclecloud.objectstorage.updateobject\"],\"data\":{\"additionalDetails\":{\"bucketName\":[\"${var.prefix}-public-bucket\"]}}}"
   #description = <<Optional value not found in discovery>>
   display_name = "opensearch-input-rule"
   is_enabled = "true"
