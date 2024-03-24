@@ -25,8 +25,8 @@ echo "COMPUTE_PUBLIC-IP=$COMPUTE_IP"
 
 echo "-- Creating oss_store.jks" 
 echo -n | openssl s_client -connect $STREAM_BOOSTRAPSERVER | sed -ne  '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > target/ociStreaming.cert
-# keytool -keystore oss_store.jks -alias OSSStream -import -file ociStreaming.cert -storepass changeit -noprompt
-echo "File target/oss_store.jks created"
+keytool -keystore oss_store.jks -alias OSSStream -import -file target/ociStreaming.cert -storepass changeit -noprompt
+echo "File oss_store.jks created"
 
 echo "-- Associating OIC with the private subnet"
 echo oci integration integration-instance change-private-endpoint-outbound-connection-private-endpoint-outbound-connection --integration-instance-id $TF_VAR_oic_ocid --private-endpoint-outbound-connection-subnet-id $PRIVATE_SUBNET_OCID --wait-for-state SUCCEEDED --wait-for-state FAILED
