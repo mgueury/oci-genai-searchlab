@@ -67,6 +67,7 @@ resource "oci_functions_function" "starter_fn_function" {
 }
 
 resource "oci_identity_policy" "starter_fn_policy" {
+  provider       = oci.home
   name           = "${var.prefix}-fn-policy"
   description    = "APIGW access Function"
   compartment_id = local.lz_appdev_cmp_ocid

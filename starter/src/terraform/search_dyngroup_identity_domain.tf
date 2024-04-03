@@ -30,6 +30,7 @@ resource "oci_identity_domains_dynamic_resource_group" "search-oic-dyngroup" {
 }
 
 resource "oci_identity_policy" "starter_opensearch_policy" {
+  provider       = oci.home
   name           = "${var.prefix}-policy"
   description    = "${var.prefix} policy"
   compartment_id = local.lz_appdev_cmp_ocid
@@ -49,6 +50,7 @@ resource "oci_identity_policy" "starter_opensearch_policy" {
 # - if the policy is defined at the compartment level -> Error when creating Opensearch  
 # - if the user is not an Admin, he can not create the policy in the root compartment
 resource "oci_identity_policy" "search-policy" {
+  provider       = oci.home
   name           = "${var.prefix}-policy"
   description    = "${var.prefix} policy"
   compartment_id = var.tenancy_ocid
