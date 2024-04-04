@@ -14,19 +14,21 @@ locals {
 }
 
 resource "oci_identity_domains_dynamic_resource_group" "search-fn-dyngroup" {
-    #Required
-    display_name = "${var.prefix}-fn-dyngroup"
-    idcs_endpoint = local.idcs_url
-    matching_rule = "ALL {resource.type = 'fnfunc', resource.compartment.id = '${var.compartment_ocid}'}"
-    schemas = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
+  #Required
+  provider       = oci.home
+  display_name   = "${var.prefix}-fn-dyngroup"
+  idcs_endpoint  = local.idcs_url
+  matching_rule  = "ALL {resource.type = 'fnfunc', resource.compartment.id = '${var.compartment_ocid}'}"
+  schemas        = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
 }
 
 resource "oci_identity_domains_dynamic_resource_group" "search-oic-dyngroup" {
-    #Required
-    display_name = "${var.prefix}-oic-dyngroup"
-    idcs_endpoint = local.idcs_url
-    matching_rule = "ALL {resource.id = '${var.oic_appid}'}"
-    schemas = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
+  #Required
+  provider       = oci.home
+  display_name   = "${var.prefix}-oic-dyngroup"
+  idcs_endpoint  = local.idcs_url
+  matching_rule  = "ALL {resource.id = '${var.oic_appid}'}"
+  schemas        = ["urn:ietf:params:scim:schemas:oracle:idcs:DynamicResourceGroup"]
 }
 
 resource "oci_identity_policy" "starter_opensearch_policy" {
