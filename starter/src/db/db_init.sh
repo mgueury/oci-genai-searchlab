@@ -86,3 +86,30 @@ curl -0 -v -X PUT https://${OPENSEARCH_HOST}:9200/oic \
 EOF
 
 curl https://${OPENSEARCH_HOST}:9200/oic/_search?size=1000&scroll=1m&pretty=true
+
+# Create a pipeline for Hybrid Queries
+curl -X PUT https://${OPENSEARCH_HOST}:9200/_search/pipeline/nlp-search-pipeline \
+-H 'Content-Type: application/json; charset=utf-8' \
+--data-binary @- << EOF
+{
+  "description": "Post processor for hybrid search",
+  "phase_results_processors": [
+    {
+      "normalization-processor": {
+        "normalization": {
+          "technique": "l2"
+        },
+        "combination": {
+          "technique": "arithmetic_mean",
+          "parameters": {
+            "weights": [
+              0.5,
+              0.5
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
+EOF
