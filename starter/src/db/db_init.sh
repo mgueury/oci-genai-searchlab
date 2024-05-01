@@ -103,8 +103,8 @@ curl -X PUT https://${OPENSEARCH_HOST}:9200/_search/pipeline/nlp-search-pipeline
           "technique": "arithmetic_mean",
           "parameters": {
             "weights": [
-              0.5,
-              0.5
+              0.3,
+              0.7
             ]
           }
         }
@@ -113,3 +113,10 @@ curl -X PUT https://${OPENSEARCH_HOST}:9200/_search/pipeline/nlp-search-pipeline
   ]
 }
 EOF
+
+# Purge the index
+# curl -XPOST https://${OPENSEARCH_HOST}:9200/oic/_delete_by_query -H 'Content-Type: application/json; charset=utf-8' -d '{
+#    "query" : { 
+#       "match_all" : {}
+#   }
+# }'
