@@ -5,6 +5,8 @@ cd $SCRIPT_DIR
 export OPENSEARCH_HOST=${DB_URL}
 echo OPENSEARCH_HOST=$OPENSEARCH_HOST
 
+# curl -X DELETE https://${OPENSEARCH_HOST}:9200/oic
+
 curl -0 -v -X PUT https://${OPENSEARCH_HOST}:9200/oic \
 -H 'Content-Type: application/json; charset=utf-8' \
 --data-binary @- << EOF
