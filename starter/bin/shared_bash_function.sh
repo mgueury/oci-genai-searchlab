@@ -207,6 +207,8 @@ get_user_details() {
     # Cloud Shell
     export TF_VAR_tenancy_ocid=$OCI_TENANCY
     export TF_VAR_region=$OCI_REGION
+    # Needed for child region
+    export TF_VAR_home_region=`echo $OCI_CS_HOST_OCID | awk -F[/.] '{print $4}'`
     if [[ "$OCI_CS_USER_OCID" == *"ocid1.saml2idp"* ]]; then
       # Ex: ocid1.saml2idp.oc1..aaaaaaaaexfmggau73773/user@domain.com -> oracleidentitycloudservice/user@domain.com
       # Split the string in 2 
@@ -230,7 +232,9 @@ get_user_details() {
     export TF_VAR_user_ocid=`sed -n 's/user=//p' /tmp/ociconfig |head -1`
     export TF_VAR_fingerprint=`sed -n 's/fingerprint=//p' /tmp/ociconfig |head -1`
     export TF_VAR_private_key_path=`sed -n 's/key_file=//p' /tmp/ociconfig |head -1`
-    export TF_VAR_region=`sed -n 's/region=//p' /tmp/ociconfig |head -1`
+    export TF_VAR_home_region=`sed -n 's/region=//p' /tmp/ociconfig |head -1`
+    # XX maybe get region from 169.xxx ?
+    export TF_VAR_region=$TF_VAR_home_region
     export TF_VAR_tenancy_ocid=`sed -n 's/tenancy=//p' /tmp/ociconfig |head -1`  
     # echo TF_VAR_user_ocid=$TF_VAR_user_ocid
     # echo TF_VAR_fingerprint=$TF_VAR_fingerprint
