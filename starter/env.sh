@@ -17,7 +17,7 @@ export TF_VAR_deploy_type="function"
 export TF_VAR_compartment_ocid="__TO_FILL__"
 
 # TF_VAR_auth_token : See doc: https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrygettingauthtoken.htm
-export TF_VAR_auth_token="__TO_FILL__"
+# export TF_VAR_auth_token="__TO_FILL__"
 export TF_VAR_oic_ocid="__TO_FILL__"
 export TF_VAR_oic_appid="__TO_FILL__"
 

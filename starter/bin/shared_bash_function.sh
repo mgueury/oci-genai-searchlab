@@ -58,14 +58,15 @@ build_function() {
 
   if grep --quiet "built successfully" $TARGET_DIR/fn_build.log; then
      fn bump
-     # Store the image name and DB_URL in files
-     grep "built successfully" $TARGET_DIR/fn_build.log | sed "s/Function //" | sed "s/ built successfully.//" > $TARGET_DIR/fn_image.txt
-     echo "$1" > $TARGET_DIR/fn_db_url.txt
-     . ../../env.sh
+     export TF_VAR_fn_image=`grep "built successfully" $TARGET_DIR/fn_build.log | sed "s/Function //" | sed "s/ built successfully.//"`
      # Push the image to docker
-     docker login ${TF_VAR_ocir} -u ${TF_VAR_namespace}/${TF_VAR_username} -p "${TF_VAR_auth_token}"
+     oci raw-request --region $TF_VAR_region --http-method GET --target-uri "https://${TF_VAR_ocir}/20180419/docker/token" | jq -r .data.token | docker login -u BEARER_TOKEN --password-stdin ${TF_VAR_ocir}
+     exit_on_error
      docker push $TF_VAR_fn_image
-     exit_on_error     
+     exit_on_error
+     # Store the image name and DB_URL in files
+     echo $TF_VAR_fn_image > $TARGET_DIR/fn_image.txt
+     echo "$1" > $TARGET_DIR/fn_db_url.txt
   else 
      echo "build_function - built successfully not found"
      exit 1
@@ -86,7 +87,8 @@ create_kubeconfig() {
 
 ocir_docker_push () {
   # Docker Login
-  docker login ${TF_VAR_ocir} -u ${TF_VAR_namespace}/${TF_VAR_username} -p "${TF_VAR_auth_token}"
+  oci raw-request --region $TF_VAR_region --http-method GET --target-uri "https://${TF_VAR_ocir}/20180419/docker/token" | jq -r .data.token | docker login -u BEARER_TOKEN --password-stdin ${TF_VAR_ocir}
+  exit_on_error
   echo DOCKER_PREFIX=$DOCKER_PREFIX
 
   # Push image in registry
